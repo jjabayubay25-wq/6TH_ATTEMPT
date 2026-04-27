@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elliptic Paraboloid Calculator</title>
+    <style>
+            :root { --accent: #00ffcc; --bg: #0a0a0c; --card: #141518; }
+            body { background: var(--bg); color: white; font-family: 'Segoe UI', system-ui, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+            .card { background: var(--card); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 40px; width: 100%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center; }
+            h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 30px; letter-spacing: -0.02em; color: white; }
+            .inputs { display: grid; gap: 15px; margin-bottom: 30px; }
+            .group { text-align: left; }
+            label { display: block; font-size: 10px; font-weight: 800; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+            input { w-full; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; color: white; font-size: 14px; width: 100%; box-sizing: border-box; outline: none; transition: border-color 0.2s; }
+            input:focus { border-color: var(--accent); }
+            .result-box { background: rgba(0,255,204,0.05); border: 1px solid rgba(0,255,204,0.1); border-radius: 12px; padding: 20px; margin-top: 30px; }
+            .res-label { font-size: 10px; color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; }
+            .res-val { font-size: 28px; font-weight: 800; margin: 5px 0; color: white; }
+            svg { margin-top: 30px; filter: drop-shadow(0 0 20px rgba(0,255,204,0.2)); }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>PARABOLOID CALC</h1>
+        
+        <div class="inputs">
+            <div class="group">
+                <label>Semi-axis A</label>
+                <input type="number" id="inA" value="2" step="0.1" oninput="calc()">
+            </div>
+            <div class="group">
+                <label>Semi-axis B</label>
+                <input type="number" id="inB" value="3" step="0.1" oninput="calc()">
+            </div>
+            <div class="group">
+                <label>Height H</label>
+                <input type="number" id="inH" value="5" step="0.1" oninput="calc()">
+            </div>
+        </div>
+
+        <div class="result-box">
+            <div class="res-label">Volume (V)</div>
+            <div class="res-val" id="volumeDisplay">235.6194</div>
+            <div style="font-size: 10px; color: rgba(255,255,255,0.2)">cubic units</div>
+        </div>
+
+        <svg width="200" height="150" viewBox="0 0 400 300">
+            <path id="curve" d="M 120 100 Q 120 250 200 250 Q 280 250 280 100" fill="none" stroke="#00ffcc" stroke-width="2" />
+            <ellipse id="top" cx="200" cy="100" rx="80" ry="40" fill="rgba(0,255,204,0.1)" stroke="#00ffcc" />
+        </svg>
+    </div>
+
+    <script>
+            function calc() {
+                const a = parseFloat(document.getElementById('inA').value) || 0;
+                const b = parseFloat(document.getElementById('inB').value) || 0;
+                const h = parseFloat(document.getElementById('inH').value) || 0;
+            
+                const vol = 0.5 * Math.PI * a * b * (h * h);
+                document.getElementById('volumeDisplay').innerText = vol.toFixed(4);
+
+                // Visual updates
+                const rx = Math.min(150, a * 15);
+                const ry = Math.min(70, b * 7);
+                const height = Math.min(200, h * 20);
+                const cy = 250 - height;
+
+                const top = document.getElementById('top');
+                top.setAttribute('rx', rx);
+                top.setAttribute('ry', ry);
+                top.setAttribute('cy', cy);
+
+                const curve = document.getElementById('curve');
+                const startX = 200 - rx;
+                const endX = 200 + rx;
+                curve.setAttribute('d', `M ${startX} ${cy} Q ${startX} 250 200 250 Q ${endX} 250 ${endX} ${cy}`);
+            }
+            calc();
+    </script>
+</body>
+</html>
